@@ -131,6 +131,7 @@ module DPL
 
       def create_app_version(s3_object)
         # Elastic Beanstalk doesn't support descriptions longer than 200 characters
+        puts "creating app version"
         description = version_description[0, 200]
         options = {
           :application_name  => app_name,
@@ -142,7 +143,8 @@ module DPL
           },
           :auto_create_application => false
         }
-        eb.create_application_version(options)
+        result = eb.create_application_version(options)
+        puts "result"
       end
 
       # Wait until EB environment update finishes
@@ -183,9 +185,9 @@ module DPL
         puts "env_name: #{env_name}"
         options = {
           :environment_name  => env_name,
-          :version_label     => "726f"
+          :version_label     => version[:application_version][:version_label]
         }
-        puts "version_label (after options): #{options[:version_label]}"
+        puts "version_label: #{version[:application_version][:version_label]}"
         result = eb.update_environment(options)
         puts result
       end
