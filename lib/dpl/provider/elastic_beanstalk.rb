@@ -186,7 +186,8 @@ module DPL
           :environment_name  => env_name,
           :version_label     => version[:application_version][:version_label]
         }
-        eb.update_environment(options)
+        result = eb.update_environment(options)
+        puts result
       end
     end
   end
