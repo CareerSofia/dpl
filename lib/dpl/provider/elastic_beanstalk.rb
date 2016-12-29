@@ -181,11 +181,11 @@ module DPL
 
       def update_app(version)
         puts "env_name: #{env_name}"
-        puts "version_label: #{version[:application_version][:version_label]}"
         options = {
           :environment_name  => env_name,
-          :version_label     => version[:application_version][:version_label]
+          :version_label     => "726f"
         }
+        puts "version_label (after options): #{options[:version_label]}"
         result = eb.update_environment(options)
         puts result
       end
