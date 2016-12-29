@@ -36,7 +36,7 @@ module DPL
 
       def push_app
         @start_time = Time.now
-        create_bucket# unless bucket_exists?
+        # create_bucket unless bucket_exists?
 
         if options[:zip_file]
           zip_file = File.join(Dir.pwd, options[:zip_file])
