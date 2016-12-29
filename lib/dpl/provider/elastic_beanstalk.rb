@@ -47,9 +47,9 @@ module DPL
         s3_object = upload(archive_name, zip_file)
         sleep 5 #s3 eventual consistency
         version = create_app_version(s3_object)
-        log "finished creating version"
+        puts "finished creating version"
         if !only_create_app_version
-          log "updating app"
+          puts "updating app"
           update_app(version)
           wait_until_deployed if options[:wait_until_deployed]
         end
@@ -180,8 +180,8 @@ module DPL
       end
 
       def update_app(version)
-        log "env_name: #{env_name}"
-        log "version_label: #{version[:application_version][:version_label]}"
+        puts "env_name: #{env_name}"
+        puts "version_label: #{version[:application_version][:version_label]}"
         options = {
           :environment_name  => env_name,
           :version_label     => version[:application_version][:version_label]
