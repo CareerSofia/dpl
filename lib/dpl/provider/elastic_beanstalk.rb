@@ -144,7 +144,7 @@ module DPL
           :auto_create_application => false
         }
         result = eb.create_application_version(options)
-        puts "result"
+        puts "result: #{result}"
       end
 
       # Wait until EB environment update finishes
