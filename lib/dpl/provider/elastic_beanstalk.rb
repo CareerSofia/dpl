@@ -36,7 +36,7 @@ module DPL
 
       def push_app
         @start_time = Time.now
-        # create_bucket unless bucket_exists?
+        create_bucket unless bucket_exists?
 
         if options[:zip_file]
           zip_file = File.join(Dir.pwd, options[:zip_file])
@@ -47,9 +47,7 @@ module DPL
         s3_object = upload(archive_name, zip_file)
         sleep 5 #s3 eventual consistency
         version = create_app_version(s3_object)
-        puts "finished creating version"
         if !only_create_app_version
-          puts "updating app"
           update_app(version)
           wait_until_deployed if options[:wait_until_deployed]
         end
@@ -66,7 +64,7 @@ module DPL
       end
 
       def version_label
-        context.env['ELASTIC_BEANSTALK_LABEL'] || "travis-#{sha}-#{Time.now.to_i}"
+        @memo_version_label ||= context.env['ELASTIC_BEANSTALK_LABEL'] || "travis-#{sha}-#{Time.now.to_i}"
       end
 
       def version_description
@@ -131,8 +129,6 @@ module DPL
 
       def create_app_version(s3_object)
         # Elastic Beanstalk doesn't support descriptions longer than 200 characters
-        puts "creating app version"
-        puts "version_label (in create): #{version_label}"
         description = version_description[0, 200]
         options = {
           :application_name  => app_name,
@@ -145,7 +141,6 @@ module DPL
           :auto_create_application => false
         }
         result = eb.create_application_version(options)
-        puts "result (in create app version): #{result.data}"
         return result
       end
 
@@ -184,14 +179,11 @@ module DPL
       end
 
       def update_app(version)
-        puts "env_name: #{env_name}"
         options = {
           :environment_name  => env_name,
           :version_label     => version[:application_version][:version_label]
         }
-        puts "version_label (in update): #{version[:application_version][:version_label]}"
         result = eb.update_environment(options)
-        puts result
       end
     end
   end
