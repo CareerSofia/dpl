@@ -145,6 +145,7 @@ module DPL
         }
         result = eb.create_application_version(options)
         puts "result: #{result}"
+        return result
       end
 
       # Wait until EB environment update finishes
