@@ -66,7 +66,7 @@ module DPL
       end
 
       def version_label
-        context.env['ELASTIC_BEANSTALK_LABEL'] || "travis-#{sha}-#{Time.now.to_i}"
+        @memo_version_label ||= context.env['ELASTIC_BEANSTALK_LABEL'] || "travis-#{sha}-#{Time.now.to_i}"
       end
 
       def version_description
@@ -145,6 +145,7 @@ module DPL
           :auto_create_application => false
         }
         result = eb.create_application_version(options)
+        puts "result (in create app version): #{result.data}"
         return result
       end
 
